@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Web Test</title>
+	<meta charset="UTF-8">
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/css/bootstrap-select.min.css">
+	<link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+<body>
+
+	<div class="container">
+
+		<div class="row add-control">
+
+			<div class="col-md-12 text-center">
+
+				<p>
+					Format:
+					<select class="selectpicker" id="format">
+						<option value="1:3">1:3</option>
+						<option value="2:5">2:5</option>
+						<option value="3:6">3:6</option>
+					</select>
+				</p>
+
+				<p>
+					Količina:
+					<input type="number" id="kolicina" value="0"/>
+				</p>
+
+				<button class="btn btn-primary" id="naruci">
+					<span class="glyphicon glyphicon-shopping-cart"></span> &nbsp; Dodaj
+				</button>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<script src="js/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/index.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.11.2/js/bootstrap-select.min.js"></script>
+</body>
+</html>
