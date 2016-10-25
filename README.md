@@ -4,4 +4,4 @@ Jednostavan sistem korpe u JavaScript-u koji koristi WebStorage u pregledaču za
 
 ## Uraditi
 
-* Prikazivanje postojećih stavki na stranici
+* Dodati cene
