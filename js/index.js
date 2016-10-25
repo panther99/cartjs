@@ -36,45 +36,50 @@ document.addEventListener("DOMContentLoaded", function () {
 // postavljamo event listener na dugme za svaki klik
 naruci.addEventListener("click", function () {
     if (!localStorage.getItem("cart")) {
-        createCart();
+        if (parseInt(kolicina.value) <= 0) {
+            alert("Morate uneti količinu!");
+        } else {
+            createCart();
+        }
     } else {
-        addToCart();
+        if (parseInt(kolicina.value) <= 0) {
+            alert("Morate uneti količinu!");
+        } else {
+            addToCart();
+        }
     }
 });
 
 // kreiranje prve narudžbine
 function createCart() {
-    if (parseInt(kolicina.value) <= 0) {
-        alert("Morate uneti količinu!");
-    } else {
 
-        // kreiramo novi objekat korpe
-        var cart = {
-            numberOfItems: 0
-        };
+    // kreiramo novi objekat korpe
+    var cart = {
+        numberOfItems: 0
+    };
 
-        // kreiramo ime za novi objekat koji će biti poslan u localStorage
-        // item<id>
-        var name = "item" + cart.numberOfItems;
+    // kreiramo ime za novi objekat koji će biti poslan u localStorage
+    // item<id>
+    var name = "item" + cart.numberOfItems;
 
-        // kreiramo novi objekat u korpi
-        // item<id> = "<format>,<kolicina>"
-        cart[name] = format.value + "," + kolicina.value;
+    // kreiramo novi objekat u korpi
+    // item<id> = "<format>,<kolicina>"
+    cart[name] = format.value + "," + kolicina.value;
 
-        // povećavamo brojevno stanje stavki u korpi
-        cart["numberOfItems"] = parseInt(cart.numberOfItems+1);
+    // povećavamo brojevno stanje stavki u korpi
+    cart["numberOfItems"] = parseInt(cart.numberOfItems+1);
 
-        // prebacujemo objekat u JSON i skladištimo u local storage
-        localStorage.setItem("cart", JSON.stringify(cart));
+    // prebacujemo objekat u JSON i skladištimo u local storage
+    localStorage.setItem("cart", JSON.stringify(cart));
 
-        // dodavanje stavke na stranicu
-        addItemOnPage();
+    // dodavanje stavke na stranicu
+    addItemOnPage();
 
-        // provera
-        check();
+    // provera
+    check();
 
-    } 
-}
+} 
+
 
 // dodavanje narudžbine
 function addToCart() {
