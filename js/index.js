@@ -3,6 +3,12 @@ var kolicina = document.getElementById("kolicina");
 var naruci = document.getElementById("naruci");
 var obrisi = document.getElementsByClassName("obrisi");
 
+var prices = {
+    "1:3": 10,
+    "2:5": 20,
+    "3:6": 30
+}
+
 // prikazivanje narudžbina na stranici ukoliko već postoje u local storage
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -12,14 +18,15 @@ document.addEventListener("DOMContentLoaded", function () {
         var items = Object.keys(cart);
         var len = items.length;
 
-        for (var i = 1; i < len; i++) {
+        for (var i = 2; i < len; i++) {
 
-            var format_slike = cart[items[i]].split(",")[0];
-            var broj_slika = cart[items[i]].split(",")[1];
+            var format_slike = String(cart[items[i]]).split(",")[0];
+            var broj_slika = String(cart[items[i]]).split(",")[1];
             var id = items[i].substring(6, items[i].length-1);
+            var cena = parseInt(prices[format_slike]) * parseInt(broj_slika);
 
             // kreiramo novu stavku na stranici
-            $(".container").append("<div class='row" + id + "'><div class='col-md-12 text-center'><div class='thumbnail'><p>Format: " + format_slike + "</p><p>Količina: " + broj_slika + "</p><button class='btn btn-danger delete" + id + " obrisi'><span class='glyphicon glyphicon-trash'></span>&nbsp;Ukloni</button></div></div></div>");
+            $(".container").append("<div class='row" + id + "'><div class='col-md-12 text-center'><div class='thumbnail'><p>Format: " + format_slike + "</p><p>Količina: " + broj_slika + "</p><p>Cena: " + cena + "</p><button class='btn btn-danger delete" + id + " obrisi'><span class='glyphicon glyphicon-trash'></span>&nbsp;Ukloni</button></div></div></div>");
 
             // dodajemo event listener dugmadima za uklanjanje
             addListener();
@@ -28,6 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
             check();
 
         }
+
+        updateThePrice(cart["price"]);
 
     }
 
@@ -55,6 +64,7 @@ function createCart() {
 
     // kreiramo novi objekat korpe
     var cart = {
+        price: 0,
         numberOfItems: 0
     };
 
@@ -69,10 +79,13 @@ function createCart() {
     // povećavamo brojevno stanje stavki u korpi
     cart["numberOfItems"] = parseInt(cart.numberOfItems+1);
 
+    // dodavanje cene
+    cart["price"] = parseInt(prices[format.value]) * parseInt(kolicina.value);
+
     // prebacujemo objekat u JSON i skladištimo u local storage
     localStorage.setItem("cart", JSON.stringify(cart));
 
-    // dodavanje stavke na stranicu
+    // dodajemo element na stranicu
     addItemOnPage();
 
     // provera
@@ -96,10 +109,13 @@ function addToCart() {
     // povećavamo brojevno stanje stavki u korpi
     cart["numberOfItems"] = parseInt(cart.numberOfItems+1);
 
+    // dodavanje cene
+    cart["price"] += parseInt(prices[format.value]) * parseInt(kolicina.value); 
+
     // prebacujemo objekat u JSON i skladištimo u local storage
     localStorage.setItem("cart", JSON.stringify(cart));
 
-    // dodavanje stavke na stranicu
+    // dodajemo element na stranicu
     addItemOnPage();
 
     // provera
@@ -112,14 +128,18 @@ function addItemOnPage() {
 
     var cart = JSON.parse(localStorage.getItem("cart"));
     var id = cart.numberOfItems-1;
-    var item = cart["item"+id]; 
+    var item = cart["item"+id];
 
     // koristimo informacije za kreiranje nove stavke na stranici
     var format_slike = item.split(",")[0];
     var broj_slika = item.split(",")[1];
+    var cena = parseInt(prices[format_slike]) * parseInt(broj_slika);
 
     // kreiramo novu stavku na stranici
-    $(".container").append("<div class='row" + id + "'><div class='col-md-12 text-center'><div class='thumbnail'><p>Format: " + format_slike + "</p><p>Količina: " + broj_slika + "</p><button class='btn btn-danger delete" + id + " obrisi'><span class='glyphicon glyphicon-trash'></span>&nbsp;Ukloni</button></div></div></div>");
+    $(".container").append("<div class='row" + id + "'><div class='col-md-12 text-center'><div class='thumbnail'><p>Format: " + format_slike + "</p><p>Količina: " + broj_slika + "</p><p>Cena: " + cena + "</p><button class='btn btn-danger delete" + id + " obrisi'><span class='glyphicon glyphicon-trash'></span>&nbsp;Ukloni</button></div></div></div>");
+
+    // ažuriramo cenu na stranici
+    updateThePrice(cart["price"]);
 
     // postavljamo event listener dugmetu za brisanje u svakoj stavci
     addListener();
@@ -162,7 +182,19 @@ function removeItem(id) {
     $(".row" + id).fadeOut("slow").remove();
 
     var cart = JSON.parse(localStorage.getItem("cart"));
+    var item = cart["item"+id];
+
+    // koristimo informacije za smanjivanje cene
+    var format_slike = item.split(",")[0];
+    var broj_slika = item.split(",")[1];
+    var cena = parseInt(prices[format_slike]) * parseInt(broj_slika);
     
+    // smanjujemo ukupnu cenu
+    cart["price"] -= cena;
+
+    // ažuriramo cenu na stranici
+    updateThePrice(cart["price"]);
+
     // uklanjamo stavku iz korpe
     delete cart["item"+id];
 
@@ -171,4 +203,8 @@ function removeItem(id) {
     // provera
     check();
 
+}
+
+function updateThePrice(price) {
+    $(".cena").text(price);
 }
