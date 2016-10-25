@@ -2,6 +2,7 @@ var format = document.getElementById("format");
 var kolicina = document.getElementById("kolicina");
 var naruci = document.getElementById("naruci");
 var obrisi = document.getElementsByClassName("obrisi");
+var obrisi_sve = document.getElementById("obrisi_sve");
 
 var prices = {
     "1:3": 10,
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var cena = parseInt(prices[format_slike]) * parseInt(broj_slika);
 
             // kreiramo novu stavku na stranici
-            $(".container").append("<div class='row" + id + "'><div class='col-md-12 text-center'><div class='thumbnail'><p>Format: " + format_slike + "</p><p>Količina: " + broj_slika + "</p><p>Cena: " + cena + "</p><button class='btn btn-danger delete" + id + " obrisi'><span class='glyphicon glyphicon-trash'></span>&nbsp;Ukloni</button></div></div></div>");
+            $("#cart").append("<div class='row" + id + "'><div class='col-md-12 text-center'><div class='thumbnail'><p>Format: " + format_slike + "</p><p>Količina: " + broj_slika + "</p><p>Cena: " + cena + "</p><button class='btn btn-danger delete" + id + " obrisi'><span class='glyphicon glyphicon-trash'></span>&nbsp;Ukloni</button></div></div></div>");
 
             // dodajemo event listener dugmadima za uklanjanje
             addListener();
@@ -57,6 +58,31 @@ naruci.addEventListener("click", function () {
             addToCart();
         }
     }
+});
+
+obrisi_sve.addEventListener("click", function () {
+
+    if (localStorage.getItem("cart")) {
+
+        var cart = JSON.parse(localStorage.getItem("cart"));
+        var items = Object.keys(cart);
+        var len = items.length;
+
+        for (var i = 2; i < len; i++) {
+
+            var id = items[i].substring(6, items[i].length-1);
+            $(".row"+id).remove();
+
+        }
+
+        // ažuriramo cenu
+        updateThePrice(0);
+
+        // uklanjamo objekat korpe iz local storage-a
+        localStorage.removeItem("cart");
+
+    }
+
 });
 
 // kreiranje prve narudžbine
@@ -136,7 +162,7 @@ function addItemOnPage() {
     var cena = parseInt(prices[format_slike]) * parseInt(broj_slika);
 
     // kreiramo novu stavku na stranici
-    $(".container").append("<div class='row" + id + "'><div class='col-md-12 text-center'><div class='thumbnail'><p>Format: " + format_slike + "</p><p>Količina: " + broj_slika + "</p><p>Cena: " + cena + "</p><button class='btn btn-danger delete" + id + " obrisi'><span class='glyphicon glyphicon-trash'></span>&nbsp;Ukloni</button></div></div></div>");
+    $("#cart").append("<div class='row" + id + "'><div class='col-md-12 text-center'><div class='thumbnail'><p>Format: " + format_slike + "</p><p>Količina: " + broj_slika + "</p><p>Cena: " + cena + "</p><button class='btn btn-danger delete" + id + " obrisi'><span class='glyphicon glyphicon-trash'></span>&nbsp;Ukloni</button></div></div></div>");
 
     // ažuriramo cenu na stranici
     updateThePrice(cart["price"]);
