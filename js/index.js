@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             var format_slike = cart[items[i]].split(",")[0];
             var broj_slika = cart[items[i]].split(",")[1];
-            var id = items[i].substring(6, items[i].length);
+            var id = items[i].substring(6, items[i].length-1);
 
             // kreiramo novu stavku na stranici
             $(".container").append("<div class='row" + id + "'><div class='col-md-12 text-center'><div class='thumbnail'><p>Format: " + format_slike + "</p><p>Količina: " + broj_slika + "</p><button class='btn btn-danger delete" + id + " obrisi'><span class='glyphicon glyphicon-trash'></span>&nbsp;Ukloni</button></div></div></div>");
