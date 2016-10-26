@@ -78,8 +78,9 @@ obrisi_sve.addEventListener("click", function () {
 
         for (var i = 2; i < len; i++) {
 
-            var id = items[i].withoutFirst(5);
+            var id = items[i].withoutFirst(4);
             $(".row"+id).remove();
+            console.log(id);
 
         }
 
