@@ -10,6 +10,14 @@ var prices = {
     "3:6": 30
 }
 
+var options = {
+    development: false
+}
+
+String.prototype.withoutFirst = function (num) {
+    return this.substring(num, this.length);
+}
+
 // prikazivanje narudžbina na stranici ukoliko već postoje u local storage
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -23,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             var format_slike = String(cart[items[i]]).split(",")[0];
             var broj_slika = String(cart[items[i]]).split(",")[1];
-            var id = items[i].substring(6, items[i].length-1);
+            var id = items[i].withoutFirst(5);
             var cena = parseInt(prices[format_slike]) * parseInt(broj_slika);
 
             // kreiramo novu stavku na stranici
@@ -70,7 +78,7 @@ obrisi_sve.addEventListener("click", function () {
 
         for (var i = 2; i < len; i++) {
 
-            var id = items[i].substring(6, items[i].length-1);
+            var id = items[i].withoutFirst(5);
             $(".row"+id).remove();
 
         }
@@ -80,6 +88,9 @@ obrisi_sve.addEventListener("click", function () {
 
         // uklanjamo objekat korpe iz local storage-a
         localStorage.removeItem("cart");
+
+        // provera
+        check();
 
     }
 
@@ -174,9 +185,11 @@ function addItemOnPage() {
 
 // provera
 function check() {
-
-    var cart = JSON.parse(localStorage.getItem("cart"));
-    console.log(cart);
+    
+    if (options["development"]) {
+        var cart = JSON.parse(localStorage.getItem("cart"));
+        console.log(cart);
+    }
 
 }
 
@@ -186,7 +199,7 @@ function addListener() {
     var e = obrisi.length-1;
     obrisi[e].addEventListener("click", function () {
         var stavka = $(this).prop("classList")[2];
-        var id = stavka.substring(6, stavka.length);
+        var id = stavka.withoutFirst(6);
         removeItem(id);
     });
 
